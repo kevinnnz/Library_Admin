@@ -1,4 +1,8 @@
-# kevinadmin
+![Library Logo](/src/assets/adminpanel.png)
+
+# Welcome to Library Admin!
+👋 This is the repo for Library Admin, a content managment admin panel for CS students to edit, add, and delete projects.
+
 
 ## Project setup
 ```
