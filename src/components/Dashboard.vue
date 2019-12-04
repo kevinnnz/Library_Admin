@@ -2,7 +2,7 @@
   <div class="container">
     <div id="title">
         <h1>Dashboard</h1>
-        <p>Signed-In as: {{ user.email }}</p>
+        <p>Signed-In as: {{ user.i.claims.email }}</p>
         <button @click="logout">Logout</button>
     </div>
     <div>
@@ -19,7 +19,8 @@
         <div v-for="(project, index) in projects" :key="index">
             <p><strong>{{ project.projectTitle }}</strong></p>
             <p>{{ project.projectDescription }}</p>
-            <p><router-link :to="{path: '/projects', name: 'project', params: { type: 'Edit', project : project }}">Edit</router-link> | Delete</p>
+            <router-link :to="{path: '/projects', name: 'project', params: { type: 'Edit', project : project }}" tag="button">Edit</router-link>
+            <button @click="deleteProject(project._id)">Delete</button>
         </div> 
     </div>  
     
@@ -36,7 +37,7 @@ export default {
         return{
             projects: [],
             books : [],
-            user: firebase.auth().currentUser.getIdTokenResult()
+            user: firebase.auth().currentUser.getIdTokenResult(true)
         }
     },
     created() {
@@ -53,8 +54,22 @@ export default {
                 this.$router.replace('login')
             })
         },
-        delete: function() {
-            
+        deleteProject: function(_id) {
+            // Add an alert before deleting an article
+            // warning this can only be done once!
+            fetch('http://localhost:8081/lib/api/projects/remove', { 
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization' : 'Bearer ' + this.user.i.token
+                },
+                body: JSON.stringify({ _id }),
+            }).then(res => {
+                this.$router.go()
+            }).catch(error => {
+                alert(error)
+            })
         }
     }
 }

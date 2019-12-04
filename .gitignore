@@ -20,3 +20,5 @@ yarn-error.log*
 *.sln
 *.sw?
 src/.env
+src/main.js
+src/main.js
